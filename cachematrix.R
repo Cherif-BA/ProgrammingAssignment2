@@ -17,16 +17,29 @@
 
 
 makeCacheMatrix <- function (x= matrix()){
-        s <- NULL                                                  # solve is first set to NULL 
-        set <- function (y){                                       # nested function    
+
+        s <- NULL                                                               # solve is first set to NULL 
+        set <- function (y){                                                    # nested function    
                 x <<- y
                 s <<- NULL
         }
-        get <- function()x                                         # this function will return the matrix 
-        setinverse <- function (solve) s <<- solve                 # use func solve () for inverse
+        get <- function()x                                                      # this function will return the matrix 
+        setinverse <- function (solve) s <<- solve                              # use func solve () for inverse
+        getinverse <- function() s 
+        list(set = set, get = get,                                              # this generates a list for the 4 
+             setinverse = setinverse)                                           # functions that will be returned
+
+        s <- NULL                                                               # solve is first set to NULL 
+        set <- function (y){                                                    # nested function    
+                x <<- y
+                s <<- NULL
+        }
+        get <- function()x                                                      # this function will return the matrix 
+        setinverse <- function (solve) s <<- solve                              # use func solve () for inverse
         getinverse <- function() s
-        list(set = set, get = get,                                 # this generates a list for the 4 
-             setinverse = setinverse,                              # functions that will be returned
+        list(set = set, get = get,                                              # this generates a list for the 4 
+             setinverse = setinverse,                                           # functions that will be returned
+
              getinverse = getinverse)
 } 
 
@@ -39,21 +52,34 @@ makeCacheMatrix <- function (x= matrix()){
 
 cacheSolve <- function(x, ...) { 
         ## Return a matrix that is the inverse of 'x'
-        s <- x$getinverse ()                                       # call the getinverse() function in input
-        if (!is.null(s)){                                          #If 's' was already calculated (not NULL) a message 
+
+        s <- x$getinverse ()                                                    # call the getinverse() function in input
+        if (!is.null(s)){                                                       # If 's' was already calculated (not NULL) a message 
                 message("Hum -_-' is this a deja vu!? Here is what you're looking for:")         # will appear
-                return(s)                                          #pre-calculated matrix inverse is returned
+                return(s)                                                       # pre-calculated matrix inverse is returned
         }
-        InvMat<- x$get()                                           #If not s is not existent (not calculated already) 
-        s <- solve(InvMat, ...)                                    # than new inverse for the new matrix will be 
-        x$setinverse(s)                                            # calculated
+        InvMat<- x$get()                                                        # If not s is not existent (not calculated already) 
+        s <- solve(InvMat, ...)                                                 # than new inverse for the new matrix will be 
+        x$setinverse(s)                                                         # calculated
+
+        s <- x$getinverse ()                                                    # call the getinverse() function in input
+        if (!is.null(s)){                                                       # If 's' was already calculated (not NULL) a message 
+                message("Hum -_-' is this a deja vu!? I think I 
+                have calculated this for you before!
+                        Here is what you're looking for:")                      # will appear
+                return(s)                                                       # pre-calculated matrix inverse is returned
+        }
+        InvMat<- x$get()                                                        # If not s is not existent (not calculated already) 
+        s <- solve(InvMat, ...)                                                 # than new inverse for the new matrix will be 
+        x$setinverse(s)                                                         # calculated
+
         s
         
 }
 
 
 # Lets do some tests
-#I'll create three metrices mat1, mat2 <- mat1 and mat3 to test my function
+#I'll create three matrices mat1, mat2 <- mat1 and mat3 to test my function
 mat1<- matrix(1:4, 2,2)
 mat2 <- mat1
 mat3<- matrix(5:8, 2,2)
